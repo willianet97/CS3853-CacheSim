@@ -6,10 +6,12 @@ import math
 import logging
 import yaml
 import gzip
+import cache
 
 ######## constants ##############
 cache_line_size = 64
 offset_bits = int(math.log(64, 2))
+
 ######## user interface #########
 def main():
 
@@ -34,15 +36,17 @@ def main():
         logging.basicConfig(level=logging.DEBUG)
     
     cacheSize = parse_size(args.size)
+    associativity = 2 ** args.assoc
+    block_size = 0 #how to calculate?
 
     memory = Memory()
-    cache = Cache()
+    cache = cache.Cache(word_size , block_size , cacheSize, cache_line_size, associativity, offset_bits)
 
     trace_file = open(arguments['trace_file'])
     trace = trace_file.read().splitlines()
     trace = [item for item in trace if not item.startswith('#')]
 
-    simulate(trace)
+    simulate(cache, memory ,trace)
 
 ######## helper functions ########
 
