@@ -9,8 +9,7 @@ def __init__(word_size , block_size , cacheSize, cache_line_size, associativity,
         #hash table that holds the cache data
         self.data = {}
         
-        #Figure out spans to cut the binary addresses into block_offset, index, and tag
-        self.block_offset_size = offset_bits #int(math.log(self.block_size, 2))
+        self.block_offset_size = offset_bits
         self.index_size = int(math.log(self.n_sets, 2))
 
         #Initialize the data 
