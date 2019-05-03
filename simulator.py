@@ -13,40 +13,38 @@ cache_line_size = 64
 offset_bits = int(math.log(64, 2))
 
 ######## user interface #########
-def main():
+parser = argparse.ArgumentParser(description='Cache Simulator.')
+parser.add_argument('-s', '--size', metavar='N', type=str, dest='size',
+                    help='the size of the cache in B, KB or MB', required=True)
+parser.add_argument('-a', '--assoc', dest='assoc', type=int, metavar='s',
+                    help='the set associativity of the cache', required=True)
+parser.add_argument('-f', '--file', metavar='FILENAME', type=str, dest='file',
+                    help="name of the input memory trace file; if the file is "
+                    "in gzip format, the file name must end with .gz",
+                    required=True)
+parser.add_argument('--debug', dest='debug', action='store_const',
+                    const=True, default=False,
+                    help='enable debugging logs')
+parser.add_argument('--print', dest='enable_print', action='store_const',
+                    const=True, default=False,
+                    help='enable cache content output')
+args = parser.parse_args()
 
-    parser = argparse.ArgumentParser(description='Cache Simulator.')
-    parser.add_argument('-s', '--size', metavar='N', type=str, dest='size',
-                        help='the size of the cache in B, KB or MB', required=True)
-    parser.add_argument('-a', '--assoc', dest='assoc', type=int, metavar='s',
-                        help='the set associativity of the cache', required=True)
-    parser.add_argument('-f', '--file', metavar='FILENAME', type=str, dest='file',
-                        help="name of the input memory trace file; if the file is "
-                        "in gzip format, the file name must end with .gz",
-                        required=True)
-    parser.add_argument('--debug', dest='debug', action='store_const',
-                        const=True, default=False,
-                        help='enable debugging logs')
-    parser.add_argument('--print', dest='enable_print', action='store_const',
-                        const=True, default=False,
-                        help='enable cache content output')
-    args = parser.parse_args()
+if args.debug:
+    logging.basicConfig(level=logging.DEBUG)
 
-    if args.debug:
-        logging.basicConfig(level=logging.DEBUG)
-    
-    cacheSize = parse_size(args.size)
-    associativity = 2 ** args.assoc
-    block_size = 0 #how to calculate?
+cacheSize = parse_size(args.size)
+associativity = 2 ** args.assoc
+block_size = 0 #how to calculate?
 
-    memory = Memory()
-    cache = cache.Cache(word_size , block_size , cacheSize, cache_line_size, associativity, offset_bits)
+memory = Memory()
+cache = cache.Cache(word_size , block_size , cacheSize, cache_line_size, associativity, offset_bits)
 
-    trace_file = open(arguments['trace_file'])
-    trace = trace_file.read().splitlines()
-    trace = [item for item in trace if not item.startswith('#')]
+trace_file = open(arguments['trace_file'])
+trace = trace_file.read().splitlines()
+trace = [item for item in trace if not item.startswith('#')]
 
-    simulate(cache, memory ,trace)
+simulate(cache, memory ,trace)
 
 ######## helper functions ########
 
