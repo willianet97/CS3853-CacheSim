@@ -35,16 +35,14 @@ if args.debug:
 
 cacheSize = parse_size(args.size)
 associativity = 2 ** args.assoc
-block_size = 0 #how to calculate?
 
-memory = Memory()
-cache = cache.Cache(word_size , block_size , cacheSize, cache_line_size, associativity, offset_bits)
+cache = cache.Cache(cacheSize, cache_line_size, associativity, offset_bits)
 
 trace_file = open(arguments['trace_file'])
 trace = trace_file.read().splitlines()
 trace = [item for item in trace if not item.startswith('#')]
 
-simulate(cache, memory ,trace)
+simulate(cache, trace, minLength)
 
 ######## helper functions ########
 
@@ -64,3 +62,26 @@ def parse_size(size):
         print("Invalid cache size")
         sys.exit(1)
     return s
+
+####### simulator #############
+
+def simulate(cache, trace, minLength):
+    misses = 0
+    hits = 0
+    for line in range(len(trace)):
+        splitLine = line.split()
+        results = []
+        if (len(splitLine) == 3):
+            trash, op, address = instruction.split()
+            if op == 'R':
+                new_missses , new_hits = cache.read(address, misses, hits)
+            else:
+                new_missses , new_hits = cache.write(address, misses, hits)
+            misses = new_missses
+            hits = new_hits
+    print_results(misses, hits)
+    
+
+def print_results(misses, hits):
+    ratio = (hits / ((hits + misses) if misses else 1)) * 100
+    print("Hit/Miss Ratio: {0:.2f}%".format(ratio) + "\n")
