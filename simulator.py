@@ -38,7 +38,7 @@ associativity = 2 ** args.assoc
 
 cache = cache.Cache(cacheSize, cache_line_size, associativity, offset_bits)
 
-trace_file = open(arguments['trace_file'])
+trace_file = open(args.file)
 trace = trace_file.read().splitlines()
 trace = [item for item in trace if not item.startswith('#')]
 
@@ -75,8 +75,13 @@ def simulate(cache, trace, minLength):
             trash, op, address = instruction.split()
             if op == 'R':
                 new_missses , new_hits = cache.read(address, misses, hits)
+                if(new_misses > misses):
+                    cache.load(address)
+
             else:
                 new_missses , new_hits = cache.write(address, misses, hits)
+                if(new_misses > misses):
+                    cache.load(address)
             misses = new_missses
             hits = new_hits
     print_results(misses, hits)

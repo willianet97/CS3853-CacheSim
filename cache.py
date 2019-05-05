@@ -25,6 +25,37 @@ def read(self, address, misses, hits):
         misses = misses +1
 
     return (misses, hits)
+
+def load(self, address, )
+    """Load a block of memory into the cache.
+    :param int address: memory address for data to load to cache
+    :param list data: block of memory to load into cache
+    :return: tuple containing victim address and data (None if no victim)
+    """
+    block_offset, index, tag = self.parse_address(address)
+    cache_set = self._get_set(index)
+    victim_info = None
+
+    # Select the victim
+    victim = cache_set[0]
+
+    for index in range(len(cache_set)):
+        if cache_set[index].use < victim.use:
+            victim = cache_set[index]
+
+    victim.use = 0
+
+    # Store victim info if modified
+    if victim.modified:
+        victim_info = (index, victim.data)
+
+    # Replace victim
+    victim.modified = 0
+    victim.valid = 1
+    victim.tag = tag
+    victim.data = data
+
+    return victim_info
     
 
 def write(self, address, misses, hits):
