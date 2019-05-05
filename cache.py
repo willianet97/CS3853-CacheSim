@@ -1,5 +1,4 @@
 import random
-import util
 from math import log
 from line import Line
 
