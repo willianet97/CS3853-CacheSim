@@ -41,7 +41,7 @@ def write(self, address, misses, hits):
     self._update_use(line, set_cache)
     return (misses, hits)
 
-def load(self, address)
+def load(self, address):
     """Load a block of memory into the cache.
     :param int address: memory address for data to load to cache
     :param list data: block of memory to load into cache

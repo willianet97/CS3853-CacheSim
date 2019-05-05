@@ -4,7 +4,6 @@ import argparse
 import sys
 import math
 import logging
-import yaml
 import gzip
 import cache
 
