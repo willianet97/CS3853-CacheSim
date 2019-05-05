@@ -77,11 +77,13 @@ def simulate(cache, trace, minLength):
                 new_missses , new_hits = cache.read(address, misses, hits)
                 if(new_misses > misses):
                     cache.load(address)
+                    cache.read(address)
 
             else:
                 new_missses , new_hits = cache.write(address, misses, hits)
                 if(new_misses > misses):
                     cache.load(address)
+                    cache.write(address)
             misses = new_missses
             hits = new_hits
     print_results(misses, hits)
