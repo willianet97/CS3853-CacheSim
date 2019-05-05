@@ -11,7 +11,7 @@ def __init__(cacheSize, cache_line_size, associativity, offset_bits):
 
 def read(self, address, misses, hits):
     block_offset, index, tag = self.parse_address(address)
-    cache_set = self._get_set(index)
+    set_cache = self._get_set(index)
     line = None
 
     for candidate in set_cache:
@@ -26,7 +26,22 @@ def read(self, address, misses, hits):
 
     return (misses, hits)
 
-def load(self, address, )
+def write(self, address, misses, hits):
+    block_offset, index, tag = self.parse_address(address)
+    set_cache = self._get_set(index)
+    for candidate in set_cache:
+        if candidate.tag == tag and candidate.valid:
+            line = candidate
+            break
+    if line:
+            hits = hits +1
+            line.modified = 1
+    else: 
+        misses = misses +1
+    self._update_use(line, set_cache)
+    return (misses, hits)
+
+def load(self, address)
     """Load a block of memory into the cache.
     :param int address: memory address for data to load to cache
     :param list data: block of memory to load into cache
@@ -56,10 +71,6 @@ def load(self, address, )
     victim.data = data
 
     return victim_info
-    
-
-def write(self, address, misses, hits):
-    block_offset, index, tag = self.parse_address(address)
 
 
 def parse_address(address):
