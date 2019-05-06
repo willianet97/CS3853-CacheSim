@@ -96,10 +96,11 @@ class Cache:
         """
 
         queue = line.queue
+
         if line.queue < self.associativity:
             line.queue = self.associativity
             for other in cache_set:
-                if other is not line and other.queue >= queue:
+                if other is not line and other.queue > queue:
                     other.queue -= 1
 
 
