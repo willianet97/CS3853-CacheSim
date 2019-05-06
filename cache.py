@@ -3,7 +3,7 @@ from math import log
 from line import Line
 
 class Cache:
-    def __init__(cacheSize, cache_line_size, associativity, offset_bits):
+    def __init__(self, cacheSize, cache_line_size, associativity, offset_bits):
 
         #Parameters configured by the queuer
         self.associativity = associativity
