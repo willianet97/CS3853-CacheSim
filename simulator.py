@@ -32,14 +32,13 @@ def parse_size(size):
 
 ####### simulator #############
 
-def simulate(cache, trace, minLength):
+def simulate(cache, trace):
     misses = 0
     hits = 0
-    for line in range(len(trace)):
+    for line in trace:
         splitLine = line.split()
-        results = []
         if (len(splitLine) == 3):
-            trash, op, address = instruction.split()
+            trash, op, address = splitLine
             if op == 'R':
                 new_missses , new_hits = cache.read(address, misses, hits)
                 if(new_misses > misses):
@@ -91,5 +90,5 @@ trace_file = open(args.file)
 trace = trace_file.read().splitlines()
 trace = [item for item in trace if not item.startswith('#')]
 
-simulate(cache, trace, minLength)
+simulate(cache, trace)
 

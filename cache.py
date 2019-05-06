@@ -1,5 +1,5 @@
 import random
-from math import log
+import math
 from line import Line
 
 class Cache:
@@ -8,7 +8,7 @@ class Cache:
         #Parameters configured by the queuer
         self.associativity = associativity
         self.number_sets = (cacheSize/(associativity * cache_line_size))
-        self.indexSize = int(math.log(number_sets, 2))
+        self.indexSize = int(math.log(self.number_sets, 2))
         self.offset_bits = offset_bits
 
         #Initialize the data 
@@ -78,7 +78,7 @@ class Cache:
         return victim_info
 
 
-    def parse_address(address):
+    def parse_address(self, address):
         decimal = bin(int(address, 16))[2:]
         tag = decimal[0:len(decimal)-self.offset_bits-self.indexSize]
         if tag == '':
