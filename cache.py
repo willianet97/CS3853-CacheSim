@@ -9,7 +9,7 @@ class Cache:
         self.size = cacheSize
         self.associativity = associativity
         self.cache_line_size = cache_line_size
-        self.number_sets = (cacheSize/(associativity * cache_line_size))
+        self.number_sets = (cacheSize/associativity)
         self.indexSize = int(math.log(self.number_sets, 2))
         self.offset_bits = offset_bits
 
@@ -36,16 +36,18 @@ class Cache:
     def write(self, address):
         block_offset, index, tag = self.parse_address(address)
         set_cache = self._get_set(address)
+        line = None 
+
         for candidate in set_cache:
             if candidate.tag == tag and candidate.valid:
                 line = candidate
+                self._update_queue(line, set_cache)
                 break
         if line:
                 result = 1
                 line.modified = 1
         else: 
             result = 0
-        self._update_use(line, set_cache)
         return result
 
     def load(self, address):

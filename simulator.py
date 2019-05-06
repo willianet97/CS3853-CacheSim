@@ -36,7 +36,6 @@ def simulate(cache, trace):
     global misses
     global hits
     for line in trace:
-        print("read record")
         splitLine = line.split()
         if (len(splitLine) == 3):
             trash, op, address = splitLine
